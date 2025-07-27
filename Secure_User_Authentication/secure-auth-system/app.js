@@ -8,6 +8,10 @@ const protectedRoutes = require('./routes/protected');
 
 const app = express();
 
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' ? 'your-frontend-domain.com' : 'http://localhost:3000',
+  credentials: true
+}));
 
 app.use(helmet());
 
@@ -35,10 +39,6 @@ app.use(limiter);
 app.use('/api/auth/login', authLimiter);
 app.use('/api/auth/register', authLimiter);
 
-app.use(cors({
-  origin: process.env.NODE_ENV === 'production' ? 'your-frontend-domain.com' : 'http://localhost:3000',
-  credentials: true
-}));
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
